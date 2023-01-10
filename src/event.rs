@@ -1,6 +1,6 @@
 extern crate libc;
 use crate::ffi::*;
-use libc::{c_int, c_uint, c_short};
+use libc::{c_int, c_short, c_uint};
 
 #[repr(C)]
 #[derive(PartialEq, Debug)]
@@ -27,27 +27,25 @@ pub enum SeqEventType {
     ChannelPressure,
     SystemReset,
     Unregistering,
-    LastEvent
+    LastEvent,
 }
 
-
-
 pub struct Event {
-    c_fluid_event: *mut fluid_event_t
+    c_fluid_event: *mut fluid_event_t,
 }
 
 impl Event {
     pub fn new() -> Event {
         unsafe {
             Event {
-                c_fluid_event: new_fluid_event()
+                c_fluid_event: new_fluid_event(),
             }
         }
     }
 
     pub fn from_raw(raw_event: *mut fluid_event_t) -> Event {
         Event {
-             c_fluid_event: raw_event
+            c_fluid_event: raw_event,
         }
     }
 
@@ -65,17 +63,22 @@ impl Event {
 
     // TODO
     /*pub fn timer(&self, ) {
-    
+
     }*/
 
     // TODO
     /*pub fn note(&self) {
-    
+
     }*/
 
     pub fn noteon(&self, channel: i32, key: i16, velocity: i16) {
         unsafe {
-            fluid_event_noteon(self.to_raw(), channel as c_int, key as c_short, velocity as c_short);
+            fluid_event_noteon(
+                self.to_raw(),
+                channel as c_int,
+                key as c_short,
+                velocity as c_short,
+            );
         }
     }
 
@@ -111,13 +114,24 @@ impl Event {
 
     pub fn program_select(&self, channel: i32, sfont_id: u32, bank_num: i16, preset_num: i16) {
         unsafe {
-            fluid_event_program_select(self.to_raw(), channel as c_int, sfont_id as c_uint, bank_num as c_short, preset_num as c_short);
+            fluid_event_program_select(
+                self.to_raw(),
+                channel as c_int,
+                sfont_id as c_uint,
+                bank_num as c_short,
+                preset_num as c_short,
+            );
         }
     }
 
     pub fn control_change(&self, channel: i32, control: i16, val: i16) {
         unsafe {
-            fluid_event_control_change(self.to_raw(), channel as c_int, control as c_short, val as c_short);
+            fluid_event_control_change(
+                self.to_raw(),
+                channel as c_int,
+                control as c_short,
+                val as c_short,
+            );
         }
     }
 
@@ -194,57 +208,39 @@ impl Event {
     }
 
     pub fn get_type(&self) -> i32 {
-        unsafe {
-            fluid_event_get_type(self.to_raw())
-        }
+        unsafe { fluid_event_get_type(self.to_raw()) }
     }
 
     pub fn get_source(&self) -> i16 {
-        unsafe {
-            fluid_event_get_source(self.to_raw())
-        }
+        unsafe { fluid_event_get_source(self.to_raw()) }
     }
 
     pub fn get_destination(&self) -> i16 {
-        unsafe {
-            fluid_event_get_dest(self.to_raw())
-        }
+        unsafe { fluid_event_get_dest(self.to_raw()) }
     }
 
     pub fn get_channel(&self) -> i32 {
-        unsafe {
-            fluid_event_get_channel(self.to_raw())
-        }
+        unsafe { fluid_event_get_channel(self.to_raw()) }
     }
 
     pub fn get_key(&self) -> i16 {
-        unsafe {
-            fluid_event_get_key(self.to_raw())
-        }
+        unsafe { fluid_event_get_key(self.to_raw()) }
     }
 
     pub fn get_velocity(&self) -> i16 {
-        unsafe {
-            fluid_event_get_velocity(self.to_raw())
-        }
+        unsafe { fluid_event_get_velocity(self.to_raw()) }
     }
 
     pub fn get_control(&self) -> i16 {
-        unsafe {
-            fluid_event_get_control(self.to_raw())
-        }
+        unsafe { fluid_event_get_control(self.to_raw()) }
     }
 
     pub fn get_value(&self) -> i16 {
-        unsafe {
-            fluid_event_get_value(self.to_raw())
-        }
+        unsafe { fluid_event_get_value(self.to_raw()) }
     }
 
     pub fn get_program(&self) -> i16 {
-        unsafe {
-            fluid_event_get_program(self.to_raw())
-        }
+        unsafe { fluid_event_get_program(self.to_raw()) }
     }
 
     // TODO
@@ -255,29 +251,20 @@ impl Event {
     }*/
 
     pub fn get_duration(&self) -> u32 {
-        unsafe {
-            fluid_event_get_duration(self.to_raw())
-        }
+        unsafe { fluid_event_get_duration(self.to_raw()) }
     }
 
     pub fn get_bank(&self) -> i16 {
-        unsafe {
-            fluid_event_get_bank(self.to_raw())
-        }
+        unsafe { fluid_event_get_bank(self.to_raw()) }
     }
 
     pub fn get_pitch(&self) -> i32 {
-        unsafe {
-            fluid_event_get_pitch(self.to_raw())
-        }
+        unsafe { fluid_event_get_pitch(self.to_raw()) }
     }
 
     pub fn get_sfont_id(&self) -> u32 {
-        unsafe {
-            fluid_event_get_sfont_id(self.to_raw())
-        }
+        unsafe { fluid_event_get_sfont_id(self.to_raw()) }
     }
-
 
     pub fn to_raw(&self) -> *mut fluid_event_t {
         self.c_fluid_event
@@ -287,8 +274,7 @@ impl Event {
 impl Drop for Event {
     fn drop(&mut self) -> () {
         unsafe {
-            delete_fluid_event(self.to_raw()); 
+            delete_fluid_event(self.to_raw());
         }
     }
 }
-

@@ -1,16 +1,13 @@
 extern crate libc;
 use crate::ffi::*;
 
-
 #[repr(C)]
 #[derive(PartialEq, Debug)]
 pub enum VoiceAddMod {
     Overwrite = 0,
-    Add, 
+    Add,
     Default,
 }
-
-
 
 // TODO
 
@@ -25,4 +22,3 @@ impl Voice {
         }
     }
 }*/
-

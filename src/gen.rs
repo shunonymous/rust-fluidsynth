@@ -4,7 +4,7 @@ use crate::ffi::*;
 #[derive(PartialEq, Debug)]
 pub enum GenFlags {
     Unused = 0,
-    Set, 
+    Set,
     AbsNrpn,
 }
 
@@ -12,7 +12,7 @@ pub enum GenFlags {
 #[derive(PartialEq, Debug)]
 pub enum GenType {
     StartAddrOffset = 0,
-    EndAddrOffset, 
+    EndAddrOffset,
     StartLoopAddOffset,
     EndLoopAddrOffset,
     StartAddrCoarseOffset,
@@ -66,4 +66,3 @@ pub enum GenType {
     Pitch,
     Last,
 }
-
