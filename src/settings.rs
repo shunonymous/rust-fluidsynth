@@ -1,6 +1,6 @@
 extern crate libc;
 use libc::{c_int, c_char, c_double, c_void};
-use ffi::*;
+use crate::ffi::*;
 use std::ffi::{CString, CStr};
 use std::mem::*;
 use std::str;

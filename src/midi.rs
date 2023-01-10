@@ -1,10 +1,10 @@
 extern crate libc;
 use libc::{c_void, c_int, c_float};
 use std::ffi::{CString, CStr};
-use ffi::*;
-use settings::*;
-use event::*;
-use synth::Synth;
+use crate::ffi::*;
+use crate::settings::*;
+use crate::event::*;
+use crate::synth::Synth;
 use std::mem::*;
 
 

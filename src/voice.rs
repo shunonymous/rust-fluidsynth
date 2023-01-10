@@ -1,5 +1,5 @@
 extern crate libc;
-use ffi::*;
+use crate::ffi::*;
 
 
 #[repr(C)]

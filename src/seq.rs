@@ -1,8 +1,8 @@
 extern crate libc;
 use libc::{c_int, c_uint, c_short, c_void, c_double};
-use ffi::*;
-use synth::*;
-use event::*;
+use crate::ffi::*;
+use crate::synth::*;
+use crate::event::*;
 use std::ffi::{CString, CStr};
 use std::str;
 

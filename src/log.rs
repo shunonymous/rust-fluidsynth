@@ -1,4 +1,4 @@
-use ffi::*;
+use crate::ffi::*;
 
 #[repr(C)]
 #[derive(PartialEq, Debug)]

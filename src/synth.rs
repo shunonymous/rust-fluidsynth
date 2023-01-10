@@ -1,12 +1,12 @@
 extern crate libc;
 use libc::{c_int, c_uint, c_double, c_float};
 use std::ffi::{CString, CStr};
-use ffi::*;
-use settings::*;
-use sfont::*;
+use crate::ffi::*;
+use crate::settings::*;
+use crate::sfont::*;
 use std::str;
 use std::mem::*;
-use midi::MidiRouter;
+use crate::midi::MidiRouter;
 
 #[repr(C)]
 #[derive(PartialEq, Debug)]

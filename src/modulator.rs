@@ -1,7 +1,7 @@
 extern crate libc;
 use libc::{c_int, c_double};
-use ffi::*;
-use gen::*;
+use crate::ffi::*;
+use crate::gen::*;
 use std::mem::*;
 
 #[repr(C)]
