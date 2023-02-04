@@ -60,11 +60,10 @@ fn getstr_equal() {
 }
 
 #[test]
-#[should_fail]
 fn getstr_equal_fail() {
     let settings = Settings::new();
     settings.setstr("audio.driver", "coreaudio");
-    assert!(settings.getstr_equal("audio nonextising", "foo"));
+    assert!(!settings.getstr_equal("audio nonextising", "foo"));
 }
 
 #[test]

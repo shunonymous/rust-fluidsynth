@@ -57,19 +57,26 @@ impl Settings {
     }
 
     // TODO
-    /*pub fn copystr(&self, name: &str, mut string: &mut String, length: i32) -> bool {
+    pub fn copystr(&self, name: &str, mut string: &mut String, length: i32) -> bool {
         let name_str = CString::new(name).unwrap();
         let string_str = CString::new(string.clone()).unwrap();
         unsafe {
-            let res = fluid_settings_copystr(self.c_fluid_settings, name_str.as_ptr(), string_str.as_ptr() as *mut c_char, length as c_int);
-            *string = str::from_utf8(CStr::from_ptr(string_str).to_bytes()).unwrap().to_string();
+            let res = fluid_settings_copystr(
+                self.c_fluid_settings,
+                name_str.as_ptr(),
+                string_str.as_ptr() as *mut c_char,
+                length as c_int,
+            );
+            *string = str::from_utf8(CStr::from_ptr(string_str.as_ptr()).to_bytes())
+                .unwrap()
+                .to_string();
 
             res != 0
         }
-    }*/
+    }
 
     // TODO
-    /*pub fn getstr(&self, name: &str) -> Option<String>{
+    pub fn getstr(&self, name: &str) -> Option<String> {
         unsafe {
             let length = 100;
             let mut s = String::with_capacity(length);
@@ -78,10 +85,10 @@ impl Settings {
 
             match res {
                 true => Some(s),
-                _ => None
+                _ => None,
             }
         }
-    }*/
+    }
 
     pub fn getstr_default(&self, name: &str) -> Option<String> {
         unsafe {
