@@ -265,7 +265,8 @@ extern "C" {
     pub fn fluid_settings_getstr_default(
         settings: *mut fluid_settings_t,
         name: *const ::libc::c_char,
-    ) -> *mut ::libc::c_char;
+        def: *mut *mut ::libc::c_char,
+    ) -> ::libc::c_int;
     pub fn fluid_settings_str_equal(
         settings: *mut fluid_settings_t,
         name: *const ::libc::c_char,
@@ -284,7 +285,8 @@ extern "C" {
     pub fn fluid_settings_getnum_default(
         settings: *mut fluid_settings_t,
         name: *const ::libc::c_char,
-    ) -> ::libc::c_double;
+        val: *mut ::libc::c_double,
+    ) -> ::libc::c_int;
     pub fn fluid_settings_getnum_range(
         settings: *mut fluid_settings_t,
         name: *const ::libc::c_char,
@@ -304,6 +306,7 @@ extern "C" {
     pub fn fluid_settings_getint_default(
         settings: *mut fluid_settings_t,
         name: *const ::libc::c_char,
+        val: *mut ::libc::c_int,
     ) -> ::libc::c_int;
     pub fn fluid_settings_getint_range(
         settings: *mut fluid_settings_t,

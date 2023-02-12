@@ -2,6 +2,7 @@ extern crate libc;
 use crate::ffi::*;
 use libc::{c_char, c_double, c_int, c_void};
 use std::ffi::{CStr, CString};
+use std::fmt::Result;
 use std::mem::*;
 use std::ptr;
 use std::str;
@@ -76,33 +77,30 @@ impl Settings {
     }
 
     // TODO
-    pub fn getstr(&self, name: &str) -> Option<String> {
-        unsafe {
-            let length = 100;
-            let mut s = String::with_capacity(length);
+    // pub fn getstr(&self, name: &str) -> Option<String> {
+    //     let length = 100;
+    //     let mut s = String::with_capacity(length);
 
-            let res = self.copystr(name, &mut s, length as i32);
-
-            match res {
-                true => Some(s),
-                _ => None,
-            }
-        }
-    }
+    //     // let res = self.copystr(name, &mut s, length as i32);
+    //     let res = true;
+    //     s = "coreaudio".to_string();
+    //     match res {
+    //         true => Some(s),
+    //         _ => None,
+    //     }
+    // }
 
     pub fn getstr_default(&self, name: &str) -> Option<String> {
         unsafe {
             let name_str = CString::new(name).unwrap();
-            let res = fluid_settings_getstr_default(self.c_fluid_settings, name_str.as_ptr());
+            let s = CString::new("").unwrap();
+            let res = fluid_settings_getstr_default(self.c_fluid_settings, name_str.as_ptr(), s.as_ptr() as *mut *mut c_char);
 
-            if res.is_null() {
-                None
-            } else {
-                Some(
-                    str::from_utf8(CStr::from_ptr(res).to_bytes())
-                        .unwrap()
-                        .to_string(),
-                )
+            match res {
+                -1 => None,
+                _ => Some(
+                    s.into_string().unwrap()
+                ),
             }
         }
     }
@@ -129,20 +127,21 @@ impl Settings {
             let res = fluid_settings_getnum(self.to_raw(), name_str.as_ptr(), &mut value);
 
             match res {
-                1 => Some(value),
-                _ => None,
+                -1 => None,
+                _ => Some(value),
             }
         }
     }
 
     pub fn getnum_default(&self, name: &str) -> Option<f64> {
+        let mut value: f64 = 0.0;
         let name_str = CString::new(name).unwrap();
         unsafe {
-            let res: f64 = fluid_settings_getnum_default(self.to_raw(), name_str.as_ptr());
+            let res = fluid_settings_getnum_default(self.to_raw(), name_str.as_ptr(), &mut value);
 
             match res {
-                0.0 => None,
-                _ => Some(res),
+                -1 => None,
+                _ => Some(value),
             }
         }
     }
@@ -177,20 +176,22 @@ impl Settings {
             let res = fluid_settings_getint(self.to_raw(), name_str.as_ptr(), &mut value);
 
             match res {
-                1 => Some(value),
-                _ => None,
+                -1 => None,
+                _ => Some(value),
             }
         }
     }
 
     pub fn getint_default(&self, name: &str) -> Option<i32> {
+        let mut value: i32 = 0;
         let name_str = CString::new(name).unwrap();
         unsafe {
-            let res: i32 = fluid_settings_getint_default(self.to_raw(), name_str.as_ptr());
+            let res: i32 =
+                fluid_settings_getint_default(self.to_raw(), name_str.as_ptr(), &mut value);
 
             match res {
-                0 => None,
-                _ => Some(res),
+                -1 => None,
+                _ => Some(value),
             }
         }
     }
