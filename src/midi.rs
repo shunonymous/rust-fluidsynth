@@ -155,32 +155,77 @@ pub struct MidiDriver {
 }
 
 impl MidiDriver {
-    pub fn new<T: Fn(MidiEvent) -> i32>(settings: &mut Settings, callback: T) -> MidiDriver {
-        unsafe {
-            let user_data = &callback as *const _ as *mut c_void;
-            let router = new_fluid_midi_driver(
-                settings.to_raw(),
-                midi_driver_callback_wrapper::<T>,
-                user_data,
-            );
-
-            return MidiDriver {
-                c_fluid_midi_driver: router,
-            };
+    pub fn new<T1: Fn(&T2, MidiEvent) -> i32, T2>(settings: &mut Settings, handler: T1, _data: &T2) -> MidiDriver {
+        struct Data<T1, T2> {
+            data: T2,
+            closure: T1,
         }
 
-        fn midi_driver_callback_wrapper<T>(
-            closure: *mut c_void,
+        let data = Data {
+            data: _data,
+            closure: handler,
+        };
+
+        unsafe {
+            let data = &data as *const _ as *mut c_void;
+            let router = new_fluid_midi_driver(
+                settings.to_raw(),
+                midi_driver_callback_wrapper::<T1, T2>,
+                data);
+            return MidiDriver {
+                c_fluid_midi_driver: router,
+            }
+        }
+
+        
+        fn midi_driver_callback_wrapper<T1, T2>(
+            data: *mut c_void,
             event: *mut fluid_midi_event_t,
         ) -> i32
         where
-            T: Fn(MidiEvent) -> i32,
+            T1: Fn(&T2, MidiEvent) -> i32,
         {
-            let closure = closure as *mut T;
+            unsafe {
+                let _data = data as *mut Data<T1, T2>;
+                let closure = &(*_data).closure;
+                let data = &(*_data).data;
 
-            unsafe { (*closure)(MidiEvent::from_raw(event)) }
+                closure(data, MidiEvent::from_raw(event))
+            }
+
+            // unsafe { (*closure)(MidiEvent::from_raw(event)) }
         }
+        // fn midi_router_callback_wrapper<T>()
     }
+
+    // pub fn new<T: Fn(MidiEvent) -> i32>(settings: &mut Settings, callback: T) -> MidiDriver {
+    //     unsafe {
+            
+
+    //         let user_data = &callback as *const _ as *mut c_void;
+    //         let router = new_fluid_midi_driver(
+    //             settings.to_raw(),
+    //             midi_driver_callback_wrapper::<T>,
+    //             user_data,
+    //         );
+
+    //         return MidiDriver {
+    //             c_fluid_midi_driver: router,
+    //         };
+    //     }
+
+    //     fn midi_driver_callback_wrapper<T>(
+    //         closure: *mut c_void,
+    //         event: *mut fluid_midi_event_t,
+    //     ) -> i32
+    //     where
+    //         T: Fn(MidiEvent) -> i32,
+    //     {
+    //         let closure = closure as *mut T;
+
+    //         unsafe { (*closure)(MidiEvent::from_raw(event)) }
+    //     }
+    // }
 
     pub fn to_raw(&self) -> *mut fluid_midi_driver_t {
         self.c_fluid_midi_driver

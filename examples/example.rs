@@ -2,7 +2,6 @@
 // https://www.fluidsynth.org/api/example_8c-example.html
 
 use std::{thread, time};
-use rand::distributions::uniform::UniformDuration;
 use rand::{self, thread_rng, Rng};
 
 use fluidsynth::settings::Settings;
