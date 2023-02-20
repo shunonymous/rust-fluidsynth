@@ -10,3 +10,10 @@ repository = "https://github.com/scholtzan/rust-fluidsynth"
 
 [dependencies]
 libc = "0.2"
+
+[[example]]
+name = "example"
+path = "examples/example.rs"
+
+[dev-dependencies]
+rand = "0.8.5"
