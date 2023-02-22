@@ -15,5 +15,9 @@ libc = "0.2"
 name = "example"
 path = "examples/example.rs"
 
+[[example]]
+name = "fluidsynth_simple"
+path = "examples/fluidsynth_simple.rs"
+
 [dev-dependencies]
 rand = "0.8.5"
